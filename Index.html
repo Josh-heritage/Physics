@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown File Browser</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .file-list {
+            margin-bottom: 20px;
+        }
+        .file-item {
+            margin: 5px 0;
+        }
+        .markdown-content {
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Markdown File Browser</h1>
+
+<div class="file-list">
+    <h2>Available Markdown Files:</h2>
+    <div id="file-items"></div>
+</div>
+
+<div class="markdown-content" id="markdown-content">
+    <h2>Markdown Preview:</h2>
+    <div id="content"></div>
+</div>
+
+<script>
+    const markdownFiles = [
+        'file1.md',
+        'file2.md',
+        // Add more files as needed
+    ];
+
+    const fileItems = document.getElementById('file-items');
+    const contentDiv = document.getElementById('content');
+
+    markdownFiles.forEach(file => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        fileItem.innerHTML = `<a href="#" onclick="loadMarkdown('${file}')">${file}</a>`;
+        fileItems.appendChild(fileItem);
+    });
+
+    function loadMarkdown(file) {
+        fetch(file)
+            .then(response => response.text())
+            .then(text => {
+                contentDiv.innerHTML = marked(text);
+            })
+            .catch(err => {
+                console.error('Error loading file:', err);
+                contentDiv.innerHTML = `<p>Error loading ${file}</p>`;
+            });
+    }
+</script>
+
+</body>
+</html>
